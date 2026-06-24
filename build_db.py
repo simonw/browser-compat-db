@@ -434,6 +434,12 @@ def build(data_dir: Path, db_path: Path) -> Dict[str, Any]:
 
     create_indexes(db)
     db.index_foreign_keys()
+    # An empty-table sync calls delete_where(), which leaves an uncommitted
+    # transaction open. Under sqlite-utils 4.0 later writes no longer flush it
+    # (3.x did), so it can still be open here -- and VACUUM cannot run inside a
+    # transaction. Commit any pending work first.
+    if db.conn.in_transaction:
+        db.conn.commit()
     db.vacuum()
     return meta
 
