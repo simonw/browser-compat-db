@@ -2,12 +2,11 @@
 
 A SQLite copy of [mdn/browser-compat-data](https://github.com/mdn/browser-compat-data).
 
-[`build_db.py`](build_db.py) loads a checkout of the MDN browser-compat-data
-repository into a well-normalized SQLite database. Every record is validated
-through [Pydantic models](models.py) first, so if MDN changes the shape of the
-data the import fails loudly instead of silently corrupting the database.
+The built (~66MB) database file [is available here](https://github.com/simonw/browser-compat-db/blob/db/browser-compat.db).
 
-## Usage
+**[Explore it in Datasette Lite](https://lite.datasette.io/?url=https://github.com/simonw/browser-compat-db/blob/db/browser-compat.db#/browser-compat/releases_tree)**.
+
+## Building it yourself
 
 This project uses [uv](https://docs.astral.sh/uv/).
 
@@ -22,6 +21,11 @@ uv run build_db.py /tmp/browser-compat-data --db browser-compat.db
 The importer is idempotent. Pull the latest `main` in the data repo and run it
 again against the same database file: features, releases and browsers that were
 added, changed or removed upstream are all synced in place.
+
+[`build_db.py`](build_db.py) loads a checkout of the MDN browser-compat-data
+repository into a normalized SQLite database. Every record is validated
+through [Pydantic models](models.py) first, so if MDN changes the shape of the
+data the import fails loudly.
 
 ## Running the tests
 
