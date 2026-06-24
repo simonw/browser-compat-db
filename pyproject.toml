@@ -1,0 +1,16 @@
+[project]
+name = "browser-compat-db"
+version = "0.1.0"
+description = "Load mdn/browser-compat-data into a normalized SQLite database"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.13.4",
+    "sqlite-utils>=3.39",
+]
+
+[dependency-groups]
+dev = [
+    "cogapp>=3.6.0",
+    "pytest>=9.1.1",
+]
