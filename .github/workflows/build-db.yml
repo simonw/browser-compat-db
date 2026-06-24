@@ -1,0 +1,57 @@
+name: Build database
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-db-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-db:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: .python-version
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Clone browser-compat-data
+        run: |
+          rm -rf /tmp/browser-compat-data
+          git clone --depth 1 https://github.com/mdn/browser-compat-data.git /tmp/browser-compat-data
+
+      - name: Build database
+        run: |
+          rm -f browser-compat.db
+          uv run build_db.py /tmp/browser-compat-data --db browser-compat.db
+
+      - name: Publish database branch
+        run: |
+          publish_dir="$(mktemp -d)"
+          cp browser-compat.db "$publish_dir/browser-compat.db"
+
+          git -C "$publish_dir" init
+          git -C "$publish_dir" checkout --orphan db
+          git -C "$publish_dir" config user.name "github-actions[bot]"
+          git -C "$publish_dir" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$publish_dir" add browser-compat.db
+          git -C "$publish_dir" commit -m "Build browser-compat.db"
+          git -C "$publish_dir" remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git -C "$publish_dir" push --force origin db
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
