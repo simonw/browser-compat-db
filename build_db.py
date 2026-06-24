@@ -432,6 +432,47 @@ def build(data_dir: Path, db_path: Path) -> Dict[str, Any]:
         alter=True,
     )
 
+    # Let's add a view
+    db.create_view("releases_tree", """
+    WITH RECURSIVE feature_tree AS (
+        SELECT
+            id,
+            parent_id,
+            category,
+            name,
+            depth,
+            description,
+            mdn_url,
+            0 AS level,
+            category || '/' || lower(name) AS sort_path,
+            category || '.' || name AS full_path
+        FROM features
+        WHERE parent_id IS NULL
+        UNION ALL
+        SELECT
+            f.id,
+            f.parent_id,
+            f.category,
+            f.name,
+            f.depth,
+            f.description,
+            f.mdn_url,
+            ft.level + 1 AS level,
+            ft.sort_path || '/' || lower(f.name) AS sort_path,
+            ft.full_path || '.' || f.name AS full_path
+        FROM features AS f
+        JOIN feature_tree AS ft ON f.parent_id = ft.id
+    )
+    SELECT
+        printf('%*s%s', level * 2, '', name) AS feature_tree,
+        category,
+        level,
+        description,
+        mdn_url
+    FROM feature_tree
+    ORDER BY category, sort_path
+    """, replace=True)
+
     create_indexes(db)
     db.index_foreign_keys()
     # An empty-table sync calls delete_where(), which leaves an uncommitted
