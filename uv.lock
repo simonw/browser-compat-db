@@ -2,6 +2,9 @@ version = 1
 revision = 3
 requires-python = ">=3.11"
 
+[options]
+prerelease-mode = "allow"
+
 [[package]]
 name = "annotated-types"
 version = "0.7.0"
@@ -29,7 +32,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "pydantic", specifier = ">=2.13.4" },
-    { name = "sqlite-utils", specifier = ">=3.39" },
+    { name = "sqlite-utils", specifier = ">=4.0rc1" },
 ]
 
 [package.metadata.requires-dev]
@@ -290,7 +293,7 @@ wheels = [
 
 [[package]]
 name = "sqlite-utils"
-version = "3.39"
+version = "4.0rc1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -301,9 +304,9 @@ dependencies = [
     { name = "sqlite-fts4" },
     { name = "tabulate" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b3/e3/6b1106349e2576c18409b27bd3b16f193b1cf38220d98ad22aa454c5e075/sqlite_utils-3.39.tar.gz", hash = "sha256:bfa2eac29b3e3eb5c9647283797527febcf4efd4a9bbb31d979a14a11ef9dbcd", size = 215324, upload-time = "2025-11-24T18:45:49.91Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/59/6d/907d93948d19d9f707b1e6dd5c9cd48f384ad55aebbe3c2ce37534f935b2/sqlite_utils-4.0rc1.tar.gz", hash = "sha256:0613fc73e04a414320d5faca86aeafc8fb4fb2d17a83fcd01c135ccf58fc792c", size = 232055, upload-time = "2026-06-21T23:33:26.292Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/33/7e01d2f6b8c778529dfae9045c4f46b33ba145c3d401fa95b07f599e7403/sqlite_utils-3.39-py3-none-any.whl", hash = "sha256:349c099c0cd60d4ee9139a24d5c9cb64af3906c3e90832fcbbd74da49333374d", size = 68451, upload-time = "2025-11-24T18:45:48.366Z" },
+    { url = "https://files.pythonhosted.org/packages/f6/37/b96fc6445f263d7e7599cede906c90557e7aa32554ab1c863062a84907ba/sqlite_utils-4.0rc1-py3-none-any.whl", hash = "sha256:aa17eac2922d07a98778c4c3dc3653efaedeea994540ac829151ac2e81740dfc", size = 75454, upload-time = "2026-06-21T23:33:24.843Z" },
 ]
 
 [[package]]

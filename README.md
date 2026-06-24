@@ -68,106 +68,106 @@ cog.outl(cog_helpers.schema())
 cog.outl("```")
 ]]] -->
 ```sql
-CREATE TABLE [browsers] (
-   [id] TEXT PRIMARY KEY,
-   [name] TEXT,
-   [type] TEXT,
-   [upstream] TEXT,
-   [preview_name] TEXT,
-   [pref_url] TEXT,
-   [accepts_flags] INTEGER,
-   [accepts_webextensions] INTEGER
+CREATE TABLE "browsers" (
+   "id" TEXT PRIMARY KEY,
+   "name" TEXT,
+   "type" TEXT,
+   "upstream" TEXT,
+   "preview_name" TEXT,
+   "pref_url" TEXT,
+   "accepts_flags" INTEGER,
+   "accepts_webextensions" INTEGER
 );
-CREATE TABLE [browser_releases] (
-   [browser_id] TEXT REFERENCES [browsers]([id]),
-   [version] TEXT,
-   [release_date] TEXT,
-   [release_notes] TEXT,
-   [status] TEXT,
-   [engine] TEXT,
-   [engine_version] TEXT,
-   PRIMARY KEY ([browser_id], [version])
+CREATE TABLE "browser_releases" (
+   "browser_id" TEXT REFERENCES "browsers"("id"),
+   "version" TEXT,
+   "release_date" TEXT,
+   "release_notes" TEXT,
+   "status" TEXT,
+   "engine" TEXT,
+   "engine_version" TEXT,
+   PRIMARY KEY ("browser_id", "version")
 );
-CREATE TABLE [features] (
-   [id] TEXT PRIMARY KEY,
-   [category] TEXT,
-   [name] TEXT,
-   [parent_id] TEXT REFERENCES [features]([id]),
-   [depth] INTEGER,
-   [description] TEXT,
-   [mdn_url] TEXT,
-   [source_file] TEXT,
-   [experimental] INTEGER,
-   [standard_track] INTEGER,
-   [deprecated] INTEGER
+CREATE TABLE "features" (
+   "id" TEXT PRIMARY KEY,
+   "category" TEXT,
+   "name" TEXT,
+   "parent_id" TEXT REFERENCES "features"("id"),
+   "depth" INTEGER,
+   "description" TEXT,
+   "mdn_url" TEXT,
+   "source_file" TEXT,
+   "experimental" INTEGER,
+   "standard_track" INTEGER,
+   "deprecated" INTEGER
 );
-CREATE TABLE [feature_tags] (
-   [feature_id] TEXT REFERENCES [features]([id]),
-   [tag] TEXT,
-   PRIMARY KEY ([feature_id], [tag])
+CREATE TABLE "feature_tags" (
+   "feature_id" TEXT REFERENCES "features"("id"),
+   "tag" TEXT,
+   PRIMARY KEY ("feature_id", "tag")
 );
-CREATE TABLE [feature_spec_urls] (
-   [feature_id] TEXT REFERENCES [features]([id]),
-   [spec_url] TEXT,
-   PRIMARY KEY ([feature_id], [spec_url])
+CREATE TABLE "feature_spec_urls" (
+   "feature_id" TEXT REFERENCES "features"("id"),
+   "spec_url" TEXT,
+   PRIMARY KEY ("feature_id", "spec_url")
 );
-CREATE TABLE [support] (
-   [feature_id] TEXT REFERENCES [features]([id]),
-   [browser_id] TEXT REFERENCES [browsers]([id]),
-   [statement_index] INTEGER,
-   [is_mirror] INTEGER,
-   [version_added] TEXT,
-   [version_removed] TEXT,
-   [supported] INTEGER,
-   [prefix] TEXT,
-   [alternative_name] TEXT,
-   [partial_implementation] INTEGER,
-   [impl_url] TEXT,
-   [notes] TEXT,
-   PRIMARY KEY ([feature_id], [browser_id], [statement_index])
+CREATE TABLE "support" (
+   "feature_id" TEXT REFERENCES "features"("id"),
+   "browser_id" TEXT REFERENCES "browsers"("id"),
+   "statement_index" INTEGER,
+   "is_mirror" INTEGER,
+   "version_added" TEXT,
+   "version_removed" TEXT,
+   "supported" INTEGER,
+   "prefix" TEXT,
+   "alternative_name" TEXT,
+   "partial_implementation" INTEGER,
+   "impl_url" TEXT,
+   "notes" TEXT,
+   PRIMARY KEY ("feature_id", "browser_id", "statement_index")
 );
-CREATE TABLE [support_flags] (
-   [feature_id] TEXT REFERENCES [features]([id]),
-   [browser_id] TEXT,
-   [statement_index] INTEGER,
-   [flag_index] INTEGER,
-   [type] TEXT,
-   [name] TEXT,
-   [value_to_set] TEXT,
-   PRIMARY KEY ([feature_id], [browser_id], [statement_index], [flag_index])
+CREATE TABLE "support_flags" (
+   "feature_id" TEXT REFERENCES "features"("id"),
+   "browser_id" TEXT,
+   "statement_index" INTEGER,
+   "flag_index" INTEGER,
+   "type" TEXT,
+   "name" TEXT,
+   "value_to_set" TEXT,
+   PRIMARY KEY ("feature_id", "browser_id", "statement_index", "flag_index")
 );
-CREATE TABLE [metadata] (
-   [key] TEXT PRIMARY KEY,
-   [value] TEXT
+CREATE TABLE "metadata" (
+   "key" TEXT PRIMARY KEY,
+   "value" TEXT
 );
-CREATE INDEX [idx_features_category]
-    ON [features] ([category]);
-CREATE INDEX [idx_features_deprecated]
-    ON [features] ([deprecated]);
-CREATE INDEX [idx_features_experimental]
-    ON [features] ([experimental]);
-CREATE INDEX [idx_browser_releases_release_date]
-    ON [browser_releases] ([release_date]);
-CREATE INDEX [idx_browser_releases_status]
-    ON [browser_releases] ([status]);
-CREATE INDEX [idx_support_browser_id]
-    ON [support] ([browser_id]);
-CREATE INDEX [idx_support_version_added]
-    ON [support] ([version_added]);
-CREATE INDEX [idx_support_supported]
-    ON [support] ([supported]);
-CREATE INDEX [idx_browser_releases_browser_id]
-    ON [browser_releases] ([browser_id]);
-CREATE INDEX [idx_features_parent_id]
-    ON [features] ([parent_id]);
-CREATE INDEX [idx_feature_tags_feature_id]
-    ON [feature_tags] ([feature_id]);
-CREATE INDEX [idx_feature_spec_urls_feature_id]
-    ON [feature_spec_urls] ([feature_id]);
-CREATE INDEX [idx_support_feature_id]
-    ON [support] ([feature_id]);
-CREATE INDEX [idx_support_flags_feature_id]
-    ON [support_flags] ([feature_id]);
+CREATE INDEX "idx_features_category"
+    ON "features" ("category");
+CREATE INDEX "idx_features_deprecated"
+    ON "features" ("deprecated");
+CREATE INDEX "idx_features_experimental"
+    ON "features" ("experimental");
+CREATE INDEX "idx_browser_releases_release_date"
+    ON "browser_releases" ("release_date");
+CREATE INDEX "idx_browser_releases_status"
+    ON "browser_releases" ("status");
+CREATE INDEX "idx_support_browser_id"
+    ON "support" ("browser_id");
+CREATE INDEX "idx_support_version_added"
+    ON "support" ("version_added");
+CREATE INDEX "idx_support_supported"
+    ON "support" ("supported");
+CREATE INDEX "idx_browser_releases_browser_id"
+    ON "browser_releases" ("browser_id");
+CREATE INDEX "idx_features_parent_id"
+    ON "features" ("parent_id");
+CREATE INDEX "idx_feature_tags_feature_id"
+    ON "feature_tags" ("feature_id");
+CREATE INDEX "idx_feature_spec_urls_feature_id"
+    ON "feature_spec_urls" ("feature_id");
+CREATE INDEX "idx_support_feature_id"
+    ON "support" ("feature_id");
+CREATE INDEX "idx_support_flags_feature_id"
+    ON "support_flags" ("feature_id");
 ```
 <!-- [[[end]]] -->
 
